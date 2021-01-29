@@ -1,0 +1,33 @@
+{
+  "name": "docker-document-converter",
+  "version": "1.0.0",
+  "description": "Docker image with unoconv and wkhtmltopdf to convert many types documents and markups",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "node esbuild",
+    "dev": "node esbuild --dev",
+    "docker:build": "npm run build && docker build --tag=docker-document-converter:latest .",
+    "docker:dev": "docker run -v \"$(pwd)/dist:/app\" -p 8000:8000 --name document-converter-dev docker-document-converter:latest",
+    "docker:prod": "docker run -p 8000:8000 --name document-converter docker-document-converter:latest",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexxNB/docker-document-converter.git"
+  },
+  "keywords": [
+    "docker",
+    "documents",
+    "converter"
+  ],
+  "author": "Alexey Schebelev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlexxNB/docker-document-converter/issues"
+  },
+  "homepage": "https://github.com/AlexxNB/docker-document-converter#readme",
+  "devDependencies": {
+    "esbuild": "^0.8.36",
+    "node-watch": "^0.7.1"
+  }
+}
