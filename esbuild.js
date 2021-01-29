@@ -1,75 +1,151 @@
-const { build } = require("esbuild");
-const { spawn,execSync } = require("child_process");
-const watch = require("node-watch");
-
 const DEV = process.argv.includes('--dev');
 
-build({
-    entryPoints: ['src/main.js'],
-    bundle: true,
-    outfile: 'dist/app.js',
-    platform: 'node',
-    sourcemap: DEV && 'inline',
-    minify: !DEV,
-    incremental: DEV
-}).then( bundle => {
-    if(DEV){
-        startDevContainer().then( container =>{
-            watch('src',{recursive:true},()=>{
-                bundle.rebuild().then( _ => {
-                    container.restart()
-                })
-            })
-        });  
-    }
-})
+// Svelte compile configuration
+const svelteConfig = {
 
-
-function startDevContainer(){
-    return new Promise(resolve => {
-        let container;
-
-        const stop = ()=>{
-            
-            container && container.kill();
-            execSync('docker stop document-converter-dev');
-        }
-
-        const start = ()=>{
-
-            execSync('docker rm --force document-converter-dev');
-            execSync('docker run -d -v \"$(pwd)/dist:/app\" -p 8000:8000 --name document-converter-dev docker-document-converter:latest');
+    compileOptions:{
+        dev: DEV,
+        css: false  //use `css:true` to inline CSS in `bundle.js`
+    },
     
-            container = spawn('docker', ['attach', 'document-converter-dev'], {
-                stdio: ['ignore', 'inherit', 'inherit'],
-                shell: true
-            });
+    preprocessor:[
+        // Place here any Svelte preprocessors
+    ]
+    
+}
 
-            process.on('SIGINT', ()=>{
-                console.log('\nStopping container... Please wait!');
-                stop();
-            });
-            process.on('SIGTERM', stop);
-            process.on('exit', stop);
-        }
-       
-        console.log('Starting container...');
-        start();
+/* Edit this file below only if know what you doing! */
 
-        resolve({
-            stop: ()=>new Promise(r => {
-                console.log('Stopping container... Please wait!');
-                stop();
-                console.log('Container stopped!');
-                r(true);
-            }),
-            restart: ()=>new Promise(r => {
-                console.log('Restarting container... Please wait!');
-                stop();
-                start();
-                console.log('Container restarted!');
-                r(true);
-            }),
+const { fork } = require("child_process");
+const { build } = require("esbuild");
+const { createRemote } = require("derver");
+const sveltePlugin = require("esbuild-svelte");
+const watch = require("node-watch");
+const path = require("path");
+
+const CWD = process.cwd();
+
+const remote = DEV && createRemote('svelte_derver_starter');
+
+(async ()=>{
+    const bundleServer = await build_server();
+    const bundleClient = await build_client();
+
+    if(DEV){
+        
+        nodemon(path.join(CWD,'dist','app.js'),{cwd:path.join(CWD,'dist')});
+                
+        watch(path.join(CWD,'src','client'),{ recursive: true }, async function() {
+            try{
+                await bundleClient.rebuild();
+            }catch(err){
+                remote.error(err.message,'Svelte compile error');
+            }
         });
+
+        watch(path.join(CWD,'src','server'),{ recursive: true }, async function() {
+            await bundleServer.rebuild();
+            await bundleClient.rebuild();
+            console.log('Restarting server...');
+        });
+    }
+})()
+
+async function build_server(){
+    return await build({
+        entryPoints: ['src/server/main.js'],
+        bundle: true,
+        outfile: 'dist/app.js',
+        platform: 'node',
+        sourcemap: DEV && 'inline',
+        minify: !DEV,
+        incremental: DEV,
+        plugins:[
+            plugin_server()
+        ]
     });
 }
+
+async function build_client(){
+    return await build({
+        entryPoints: ['src/client/main.js'],
+        bundle: true,
+        outfile: 'dist/static/build/bundle.js',
+        sourcemap: DEV && 'inline',
+        minify: !DEV,
+        incremental: DEV,
+        plugins: [
+            sveltePlugin(svelteConfig)
+        ]
+    });
+}
+
+function plugin_server(){return {
+    name: 'server-plugin',
+    setup(b) {
+        b.onResolve({ filter: /^@server$/ }, args => {
+
+            return { path: DEV ? 'server_development.js' : 'server_production.js', namespace: 'server' }
+        });
+        
+        b.onLoad({ filter: /^server_development\.js$/, namespace: 'server'}, (args) => {
+            return {
+                contents: `
+                    import {derver} from "derver";
+                    import path from "path";
+                    const DIR = path.join(__dirname,'static');
+                    export default function (options){
+                        return derver({
+                            dir: path.join(__dirname,'static'),
+                            ...options,
+                            remote: 'svelte_derver_starter'
+                        });
+                    }
+                `,
+                resolveDir: CWD
+            }
+        });
+
+        b.onLoad({ filter: /^server_production\.js$/, namespace: 'server'}, (args) => {
+            return {
+                contents: `
+                    import {derver} from "derver";
+                    import path from "path";
+                    const DIR = path.join(__dirname,'static');
+                    export default function (options){
+                        return derver({
+                            dir: path.join(__dirname,'static'),
+                            cache: true,
+                            compress: true,
+                            watch: false,
+                            host: "0.0.0.0",
+                            ...options
+                        });
+                    }
+                `,
+                resolveDir: CWD
+            }
+        });
+    }
+  }
+}
+
+function nodemon (path,options){
+    let child;
+    const kill = ()=>{
+        child && child.kill()
+    }
+
+    const start = () => {
+        child = fork(path, [], options);
+    }
+
+    process.on('SIGTERM', kill);
+    process.on('exit', kill);
+
+    start();
+    watch(path,()=>{
+        kill();
+        start();
+    });
+};

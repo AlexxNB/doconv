@@ -1,33 +1,33 @@
 {
-  "name": "docker-document-converter",
-  "version": "1.0.0",
-  "description": "Docker image with unoconv and wkhtmltopdf to convert many types documents and markups",
-  "main": "dist/app.js",
+  "name": "svelte-derver-starter",
+  "version": "0.1.2",
+  "description": "SvelteJS client and Derver server starter, bundeled with ESBuild",
+  "main": "index.js",
   "scripts": {
     "build": "node esbuild",
     "dev": "node esbuild --dev",
-    "docker:build": "npm run build && docker build --tag=docker-document-converter:latest .",
-    "docker:dev": "docker run -v \"$(pwd)/dist:/app\" -p 8000:8000 --name document-converter-dev docker-document-converter:latest",
-    "docker:prod": "docker run -p 8000:8000 --name document-converter docker-document-converter:latest",
+    "docker:build": "./docker/build.sh",
+    "docker:dev": "docker rm --force DoConvert && docker run --name DoConvert -p 3000:3000 -v $(pwd):/app doconvert:latest npm run dev --prefix /app",
+    "prestart": "npm run build",
+    "start": "cd dist && node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AlexxNB/docker-document-converter.git"
-  },
   "keywords": [
-    "docker",
-    "documents",
-    "converter"
+    "svelte",
+    "sveltejs",
+    "esbuild",
+    "derver",
+    "starter"
   ],
   "author": "Alexey Schebelev",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/AlexxNB/docker-document-converter/issues"
-  },
-  "homepage": "https://github.com/AlexxNB/docker-document-converter#readme",
   "devDependencies": {
-    "esbuild": "^0.8.36",
-    "node-watch": "^0.7.1"
+    "builtins": "^3.0.1",
+    "derver": "^0.4.12",
+    "esbuild": "^0.8.34",
+    "esbuild-svelte": "^0.4.0",
+    "node-watch": "^0.7.1",
+    "svelte": "^3.31.2",
+    "unoconv-promise": "^1.0.8"
   }
 }
