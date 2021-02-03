@@ -1,9 +1,10 @@
 import os from 'os';
 import fs from 'fs/promises';
-import {exists} from './utils';
-import path from 'path';
-import mime from './mime.json';
 import {execFile} from 'child_process';
+import {exists} from '$lib/utils';
+import path from 'path';
+import mime from '$store/mime.json';
+
 
 const TMP = os.tmpdir();
 let VERBOSE = false;
@@ -12,7 +13,10 @@ export default {
     listener,
     formats,
     convert,
+    getFormats,
     getFormat,
+    getFormatByExt,
+    getFormatByFile,
     verbose
 }
 
@@ -85,6 +89,10 @@ async function formats(){
     }
 }
 
+/** Get format info by format */
+function getFormats(){
+    return formatsList;
+}
 /** Get format info by format */
 function getFormat(format){
     return formatsList.find(f => f.format === format);

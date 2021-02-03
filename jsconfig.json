@@ -2,8 +2,11 @@
     "baseURL":".",
     "compilerOptions": {
         "paths": {
-            "@s/*": ["./src/server/*"],
-            "@c/*": ["./src/client/*"],
+            "$/*": ["./src/server/*"],
+            "$lib/*": ["./src/server/lib/*"],
+            "$EP/*": ["./src/server/endpoints/*"],
+            "$store/*": ["./src/server/store/*"],
+            "@/*": ["./src/client/*"],
         }
     }
 }

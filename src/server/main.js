@@ -1,10 +1,11 @@
 import server from '@server';
 
-import multiparty from './lib/multiparty';
-import {sendFile,errors} from './lib/middlewares';
+import multiparty from '$lib/multiparty';
+import {sendFile,errors,json} from '$lib/middlewares';
 
-import convert from './endpoints/convert';
-import unoconv from './lib/unoconv';
+import common from '$EP/common';
+import convert from '$EP/convert';
+import unoconv from '$lib/unoconv';
 
 
 unoconv.listener().catch(err=>{
@@ -20,4 +21,6 @@ const app = server({
 app.use(multiparty);
 app.use(sendFile);
 app.use(errors);
+app.use(json);
+app.sub('/',common);
 app.sub('/convert',convert);
