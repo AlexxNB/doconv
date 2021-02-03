@@ -133,22 +133,52 @@ function verbose(state){
 }
 
 /// UNOCONV WRAPER 
+const queue = [];
 
 function unoconv()
 {
     const args = Array.from(arguments).flat();
-    VERBOSE && args.unshift('--verbose');
-    args.unshift('--timeout','10');
+    const verbose = VERBOSE;
+    const nowait = args.includes('--listener');
+    
+    verbose && args.unshift('--verbose');
+    args.unshift('--timeout','15');
 
-    VERBOSE && console.log('[DEBUG] unocondv '+args.join(' '));
+    verbose && console.log('[DEBUG] unoconv '+args.join(' '));
 
-    return new Promise((resolve, reject) => {
-        const child = execFile('unoconv',args,{},(error,stdout,stderr)=>{
-            if(error) return reject(error);
-            VERBOSE && console.log('[DEBUG] '+stderr);
-            if(stderr.indexOf('Command failed') > -1) return reject(new Error(stderr));
-            resolve(stderr)
+    const fn = ()=>{
+        return new Promise((resolve,reject)=>{
+            const child = execFile('unoconv',args,{},(error,stdout,stderr)=>{
+                if(error) return reject(error);
+                verbose && console.log('[DEBUG] '+stderr);
+                if(stderr.indexOf('Command failed') > -1) return reject(new Error(stderr));
+                resolve(stderr);
+            });
         });
-    })
+    }
+
+    return nowait ? fn() : new Promise((resolve, reject) => {
+        queue.push((next)=>{
+            fn().then(result => {
+                resolve(result);
+                next();
+            }).catch(err => {
+                reject(err);
+                next();
+            });
+        });
+        run();
+    });
+}
+
+function run(){
+    if(!queue.length) return;
+
+    const next = ()=>{
+        const fn = queue.shift();
+        fn && fn(next);
+    }
+
+    next();
 }
 
