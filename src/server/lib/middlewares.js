@@ -1,4 +1,10 @@
-export function sendFile(req,res,next){
+export default [
+    sendFile,
+    errors,
+    json
+]
+
+function sendFile(req,res,next){
 
     res.sendFile = (buffer,filename,mime)=>{
         res.writeHead(200, {
@@ -11,7 +17,7 @@ export function sendFile(req,res,next){
     next();
 }
 
-export function errors(req,res,next){
+function errors(req,res,next){
 
     res.error = (message,code)=>{
         res.writeHead(code || 500, {
@@ -23,9 +29,9 @@ export function errors(req,res,next){
     next();
 }
 
-export function json(req,res,next){
+function json(req,res,next){
 
-    res.error = (obj)=>{
+    res.json = (obj)=>{
         res.writeHead(200, {
             "Content-Type":"application/json"
         });

@@ -8,10 +8,10 @@ import mime from '$store/mime.json';
 
 const TMP = os.tmpdir();
 let VERBOSE = false;
+const formatsList = [];
 
 export default {
-    listener,
-    formats,
+    init,
     convert,
     getFormats,
     getFormat,
@@ -21,10 +21,30 @@ export default {
 }
 
 /** Launch unoconv listener */
-async function listener(){
-    await unoconv('--listener');
-    formats();
+async function init(){
+    unoconv('--listener');
+
+    console.log('Waiting for LibreOffice listener...');
+
+    return new Promise((resolve,reject)=>{
+        let attempts = 10;
+        let timer = setInterval(async ()=>{
+            await loadFormats();
+
+            if(getFormats()){
+                clearInterval(timer);
+                resolve(true);
+            }
+
+            if(attempts-- < 0) {
+                clearInterval(timer);
+                reject('LibreOffice failed to start. Exit.');
+            }
+        },3000);
+    });
+    
 }
+
 
 /** Convert file to format */
 async function convert(input,format,options){
@@ -60,9 +80,9 @@ async function convert(input,format,options){
     }
 }
 
-/** Get supportes formats list */
-const formatsList = [];
-async function formats(){
+/** load supportes formats list */
+
+async function loadFormats(){
     if(formatsList.length > 0) return;
 
     const formatsRaw = await unoconv('--show');
@@ -91,7 +111,7 @@ async function formats(){
 
 /** Get format info by format */
 function getFormats(){
-    return formatsList;
+    return formatsList.length > 0 ? formatsList : null;
 }
 /** Get format info by format */
 function getFormat(format){

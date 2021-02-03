@@ -9,8 +9,9 @@ export default function( app ){
 
         unoconv.convert(input.path,format)
             .then( async result => {
-                console.log('Convert: '+input.originalFilename,'->',replaceExtension(input.originalFilename,result.meta.ext));
-                res.sendFile((await result.read()),replaceExtension(input.originalFilename,result.meta.ext),result.meta.mime);
+                const filename = replaceExtension(input.originalFilename,result.meta.ext);
+                console.log('Convert: '+input.originalFilename,'->',filename);
+                res.sendFile((await result.read()),filename,result.meta.mime);
             })
             .catch( err => {
                 res.error(err.message)
