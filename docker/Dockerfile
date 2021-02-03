@@ -1,12 +1,11 @@
-FROM node:15-alpine
+FROM node:14-alpine
 
 ENV UNO_URL https://raw.githubusercontent.com/dagwieers/unoconv/master/unoconv
 
 RUN apk --no-cache add bash \
             curl \
             util-linux \
-            libreoffice-common \
-            libreoffice-writer \
+            libreoffice \
             ttf-droid-nonlatin \
             ttf-droid \
             ttf-dejavu \

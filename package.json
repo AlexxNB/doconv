@@ -7,7 +7,7 @@
     "build": "node esbuild",
     "dev": "node esbuild --dev",
     "docker:build": "./docker/build.sh",
-    "docker:dev": "docker rm --force DoConvert && docker run --name DoConvert -p 3000:3000 -v $(pwd):/app doconvert:latest npm run dev --prefix /app",
+    "docker:dev": "docker rm --force DoConvert && docker run --name DoConvert -p 3000:3000 -v $(pwd):/app doconvert:latest npm run dev",
     "prestart": "npm run build",
     "start": "cd dist && node app",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,12 +22,12 @@
   "author": "Alexey Schebelev",
   "license": "MIT",
   "devDependencies": {
-    "builtins": "^3.0.1",
     "derver": "^0.4.12",
     "esbuild": "^0.8.34",
     "esbuild-svelte": "^0.4.0",
+    "multiparty": "^4.2.2",
     "node-watch": "^0.7.1",
-    "svelte": "^3.31.2",
-    "unoconv-promise": "^1.0.8"
-  }
+    "svelte": "^3.31.2"
+  },
+  "dependencies": {}
 }
