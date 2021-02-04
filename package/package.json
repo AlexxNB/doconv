@@ -1,0 +1,20 @@
+{
+  "name": "doconvert",
+  "version": "0.1.0",
+  "description": "doconvert API client (documents converter service in docker)",
+  "main": "dist/doconvert.js",
+  "module": "dist/doconvert.esm.js",
+  "browser": "dist/doconvert.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "doconvert",
+    "docker",
+    "document",
+    "converter",
+    "unoconv"
+  ],
+  "author": "Alexey Schebelev",
+  "license": "MIT"
+}

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node esbuild",
+    "pkg:build": "cd package && node esbuild",
     "dev": "node --enable-source-maps esbuild --dev",
     "docker:build": "./docker/build.sh",
     "docker:dev": "docker rm --force DoConvert && docker run --name DoConvert -p 3000:3000 -v $(pwd):/app doconvert:latest npm run dev",
