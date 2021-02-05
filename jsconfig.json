@@ -8,7 +8,10 @@
             "$store/*": ["./src/server/store/*"],
             "@/*": ["./src/client/*"],
             "@cmp/*": ["./src/client/components/*"],
-            "@lib/*": ["./src/client/lib/*"]
+            "@lib/*": ["./src/client/lib/*"],
+
+            "doconvert/browser": ["./package/dist/browser/doconvert.esm.js"],
+            "doconvert": ["./package/dist/doconvert.mjs"],
         }
     }
 }
