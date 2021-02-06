@@ -16,6 +16,18 @@
             result.download();
         }).catch(err => error=err);
     }
+
+    function doSave(){
+        error = null;
+        dc.convert({
+            file: files[0],
+            format,
+            hook:'http://localhost:3000/store/save',
+            context:{foo:'bar'}
+        }).then( result => {
+            //console.log(result)
+        }).catch(err => error=err);
+    }
 </script>
 
 <div class="card">
@@ -34,11 +46,14 @@
             <option value={item.format}>*.{item.ext} - {item.description}</option>
             {/each}
         </select>
-    <h4>3. Download converted file</h4>
+    <h4>3. Download or save converted file</h4>
         {#if error}
             <div class="error">{error}</div>
         {/if}
-        <p><input type='submit' value='Convert!' disabled={files===undefined} on:click={doConvert}/></p>
+        <p>
+            <input type='submit' value='Convert & download!' disabled={files===undefined} on:click={doConvert}/>
+            <input type='submit' value='Convert & save!' disabled={files===undefined} on:click={doSave}/>
+        </p>
     {/await}
 </div>
 

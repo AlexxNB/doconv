@@ -1,4 +1,4 @@
-import createApi from './lib/api';
+import createApi from './lib/browser/api';
 
 export default function(apiURL){
 
@@ -11,7 +11,7 @@ export default function(apiURL){
 
     async function convert(options){
 
-        if(!options.file) throw new Error('File for convertion was not specified');
+        if(!options.file) throw new Error('File was not specified');
 
         options = {
             download: false,
@@ -29,7 +29,7 @@ export default function(apiURL){
 
         if(!options.hook &&  options.download && result.download) result.download();
 
-        return options.hook ? `Convertion result will be send to ${hook}` : result;
+        return result;
     }
 
 

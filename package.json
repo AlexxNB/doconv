@@ -4,13 +4,14 @@
   "description": "SvelteJS client and Derver server starter, bundeled with ESBuild",
   "main": "index.js",
   "scripts": {
+    "postinstall": "cd package && npm install",
     "build": "node esbuild",
+    "dev": "node --enable-source-maps esbuild --dev",
     "pkg:build": "cd package && node esbuild",
     "pkg:dev": "cd package && node esbuild --dev",
-    "dev": "node --enable-source-maps esbuild --dev",
     "docker:build": "./docker/build.sh",
     "docker:dev": "./docker/dev.sh",
-    "prestart": "npm run build",
+    "prestart": "npm run pkg:build && npm run build",
     "start": "cd dist && node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -64,6 +64,7 @@ async function convert(input,format,options){
     args.push(input);
 
     const clear = async ()=>{if(await exists(output)) await fs.unlink(output)};
+    const clearInput = async ()=>{if(await exists(input)) await fs.unlink(input)};
     const read = async (encoding)=>{
         const buffer = await fs.readFile(output,encoding);
         await clear();
@@ -73,10 +74,21 @@ async function convert(input,format,options){
     await unoconv(args);
 
     return {
-        file: output,
-        meta: formatMeta,
-        read,
-        clear
+        output:{
+            path: output,
+            meta: formatMeta,
+            read,
+            clear
+        },
+        input:{
+            path: input,
+            meta: inputMeta,
+            clear: clearInput
+        },
+        clear: async ()=>{
+            await clear();
+            await clearInput();
+        }
     }
 }
 

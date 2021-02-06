@@ -18,9 +18,11 @@ esbuild.build({
     bundle: true,
     outfile: pkg.module,
     format: 'esm',
+    platform: 'node',
     minify: true,
     watch: DEV,
-    incremental: DEV
+    incremental: DEV,
+    external:['form-data', 'multiparty']
 });
 
 !DEV && esbuild.build({
@@ -38,6 +40,8 @@ esbuild.build({
     bundle: true,
     outfile: pkg.main,
     format: 'cjs',
-    minify: true
+    platform: 'node',
+    minify: true,
+    external:['form-data', 'multiparty']
 });
 

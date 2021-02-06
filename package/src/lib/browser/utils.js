@@ -11,6 +11,8 @@ export function downloadFile(data, filename, mime) {
     document.body.appendChild(tempLink);
     tempLink.click();
     document.body.removeChild(tempLink);
-    setTimeout(() => {window.URL.revokeObjectURL(blobURL)}, 100);
+    setTimeout(() => {
+      window.URL.revokeObjectURL(blobURL)
+    }, 100);
   }
   

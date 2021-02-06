@@ -19,5 +19,9 @@
     "unoconv"
   ],
   "author": "Alexey Schebelev",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "form-data": "^3.0.0",
+    "multiparty": "^4.2.2"
+  }
 }
