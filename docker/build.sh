@@ -1,7 +1,10 @@
 #!/bin/sh
 
-# Build app before creting images
+# Build package
+npm run pkg:build
+
+# Build app
 npm run build
 
 # Building production image
-docker build -f docker/Dockerfile -t doconvert:latest .
+docker build -f docker/Dockerfile -t doconv:latest .

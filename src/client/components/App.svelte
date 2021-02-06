@@ -1,6 +1,6 @@
 <script>
-    import doconvert from 'doconvert/browser';
-    const dc = doconvert();
+    import doconv from 'doconv/browser';
+    const dc = doconv();
 
     let files;
     let error = null;
@@ -19,7 +19,7 @@
 </script>
 
 <div class="card">
-    <h1>doconv</h1>
+    <h1>Doconv</h1>
     <p>Docker Document Converter</p>
 
     

@@ -28,7 +28,7 @@ esbuild.build({
     bundle: true,
     outfile: pkg.cdn,
     format: 'iife',
-    globalName:'doconvert',
+    globalName:'doconv',
     minify: true
 });
 

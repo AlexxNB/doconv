@@ -1,4 +1,4 @@
-# doconvert
+# Doconv
 
-dcoconvert API client for browser or nodejs.
+Doconv API client for browser or nodejs.
 

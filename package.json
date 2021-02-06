@@ -9,7 +9,7 @@
     "pkg:dev": "cd package && node esbuild --dev",
     "dev": "node --enable-source-maps esbuild --dev",
     "docker:build": "./docker/build.sh",
-    "docker:dev": "docker rm --force DoConvert && docker run --name DoConvert -p 3000:3000 -v $(pwd):/app doconvert:latest npm run dev",
+    "docker:dev": "./docker/dev.sh",
     "prestart": "npm run build",
     "start": "cd dist && node app",
     "test": "echo \"Error: no test specified\" && exit 1"

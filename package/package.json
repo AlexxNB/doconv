@@ -1,18 +1,18 @@
 {
-  "name": "doconvert",
+  "name": "doconv",
   "version": "0.1.0",
-  "description": "doconvert API client (documents converter service in docker)",
-  "main": "dist/doconvert.js",
-  "module": "dist/doconvert.mjs",
-  "browser": "dist/browser/doconvert.esm.js",
-  "cdn": "dist/browser/doconvert.js",
-  "jsdelivr": "dist/browser/doconvert.js",
-  "unpkg": "dist/browser/doconvert.js",
+  "description": "Doconv API client (documents converter service in docker)",
+  "main": "dist/doconv.js",
+  "module": "dist/doconv.mjs",
+  "browser": "dist/browser/doconv.esm.js",
+  "cdn": "dist/browser/doconv.js",
+  "jsdelivr": "dist/browser/doconv.js",
+  "unpkg": "dist/browser/doconv.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "doconvert",
+    "doconv",
     "docker",
     "document",
     "converter",
