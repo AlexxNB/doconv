@@ -11,7 +11,7 @@
             "@lib/*": ["./src/client/lib/*"],
 
             "doconvert/browser": ["./package/dist/browser/doconvert.esm.js"],
-            "doconvert": ["./package/dist/doconvert.mjs"],
+            "doconvert": ["./package/dist/doconvert.mjs"]
         }
     }
 }

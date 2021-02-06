@@ -16,12 +16,20 @@ export default function(apiURL){
         options = {
             download: false,
             format: 'pdf',
+            hook: false,
+            context: false,
             ...options
         }
 
-        const result = await api.post('/convert/'+options.format,{file:options.file});
-        if(options.download && result.download) result.download();
-        return result;
+        let data = {file: options.file};
+        if(options.hook) data.hook = options.hook;
+        if(options.context) data.context = JSON.stringify(options.context);
+
+        const result = await api.post('/convert/'+options.format,data);
+
+        if(!options.hook &&  options.download && result.download) result.download();
+
+        return options.hook ? `Convertion result will be send to ${hook}` : result;
     }
 
 
