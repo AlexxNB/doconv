@@ -1,11 +1,13 @@
 <script>
     import doconv from 'doconv/browser';
+    import List from './List';
     const dc = doconv();
 
     let files;
     let error = null;
     let format='pdf';
 
+    let updateList;
 
     function doConvert(){
         error = null;
@@ -25,7 +27,7 @@
             hook:'http://localhost:3000/store/save',
             context:{foo:'bar'}
         }).then( result => {
-            //console.log(result)
+            updateList && updateList();
         }).catch(err => error=err);
     }
 </script>
@@ -55,6 +57,7 @@
             <input type='submit' value='Convert & save!' disabled={files===undefined} on:click={doSave}/>
         </p>
     {/await}
+    <List bind:update={updateList}/>
 </div>
 
 
@@ -63,11 +66,8 @@
         background-color: #484848;
         padding: 10px 80px;
         border-radius: 15px;
-        margin: auto auto;
-        position: absolute;              
-        top: 50%;                        
-        left: 50%;                      
-        transform: translate(-50%, -50%);
+        margin: 50px auto;          
+        max-width: 600px;
     }
 
     .error{

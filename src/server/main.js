@@ -16,10 +16,11 @@ unoconv.init().then(_=>{
       port: 3000
   });
   
+  app.use(...middlewares);
   app.sub('/store',store);
 
   app.use(multiparty);
-  app.use(...middlewares);
+
 
   common(app);
   app.sub('/convert',convert);
