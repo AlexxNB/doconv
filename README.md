@@ -15,7 +15,7 @@ docker -p 3000:3000 run ghcr.io/alexxnb/doconv
 
 ## Quick test
 
-Point your browser to `http://localhost:300` and you will see the form where you can upload any document and download converted file of choosen format.
+Point your browser to `http://localhost:3000` and you will see the form where you can upload any document and download converted file of choosen format.
 
 ## Simple client example
 
