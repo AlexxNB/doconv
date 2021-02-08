@@ -23,7 +23,7 @@ You may create a form which will send a file to the service and download generat
 
 ```html
 <form action="http://localhost:3000/convert/pdf" method="POST" enctype="multipart/form-data">
-    <input type="file"/>
+    <input type="file" name="file" />
     <button type="submit">Convert</button>
 </form>
 ```
