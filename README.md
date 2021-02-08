@@ -10,7 +10,7 @@ Please check this packages to easy use the Doconv service.
 ## Run service
 
 ```sh
-docker -p 3000:3000 run ghcr.io/alexxnb/doconv
+docker run -p 3000:3000 ghcr.io/alexxnb/doconv
 ```
 
 ## Quick test
