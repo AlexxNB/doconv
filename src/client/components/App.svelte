@@ -16,7 +16,7 @@
             file: files[0],
             format
         }).then( result => {
-       // something
+            result.download();
         }).catch(err => error=err);
     }
 
@@ -28,7 +28,7 @@
             hook:'http://localhost:3000/store/save',
             context:{foo:'bar'}
         }).then( result => {
-            updateList && updateList();
+            // todo something
         }).catch(err => error=err);
     }
 
