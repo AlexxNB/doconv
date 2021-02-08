@@ -1,0 +1,32 @@
+name: Publish NPM package
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-npm.yml'
+      - 'package/package.json'
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Load repo content
+        uses: actions/checkout@v1
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+
+      - name: Installing dependencies
+        run: npm install
+
+      - name: Build distro
+        run: npm run pkg:build
+
+      - name: Publishing on NPM
+        run: cd package && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
