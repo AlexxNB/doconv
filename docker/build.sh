@@ -7,4 +7,4 @@ npm run pkg:build
 npm run build
 
 # Building production image
-docker build -f docker/Dockerfile -t doconv:latest .
+docker build -f docker/Dockerfile -t ghcr.io/alexxnb/doconv:latest .

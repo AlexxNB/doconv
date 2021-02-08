@@ -1,0 +1,27 @@
+name: Publish Docker image
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-image.yml'
+      - 'package.json'
+      - 'package/package.json'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Load repo content
+        uses: actions/checkout@v1
+
+      - name: Installing dependencies
+        run: npm install
+
+      - name: Build docker image
+        run: npm run docker:build
+
+      - name: Push docker image
+        run: |
+          echo "${{ secrets.PAT }}" | docker login ghcr.io -u alexxnb --password-stdin
+          docker push ghcr.io/alexxnb/doconv:latest
