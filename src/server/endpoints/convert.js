@@ -15,7 +15,7 @@ export default function( app ){
         const context = req.fields.context ? JSON.parse(req.fields.context[0]) : false;
 
         const url = hook && parseURL(hook,'hook');
-        if(!url) return res.error('Invalid hook URL')
+        if(hook && !url) return res.error('Invalid hook URL')
 
         unoconv.convert(input.path,format).then( async result => {
             const filename = replaceExtension(input.originalFilename,result.output.meta.ext);

@@ -1,3 +1,5 @@
+import fs from 'fs/promises';
+
 export default [
     sendFile,
     errors,
@@ -6,7 +8,9 @@ export default [
 
 function sendFile(req,res,next){
 
-    res.sendFile = (buffer,filename,mime)=>{
+    res.sendFile = async (buffer,filename,mime)=>{
+        if(typeof buffer == 'string' && /\.\w+$/.test(buffer)) buffer = await fs.readFile(buffer);
+
         res.writeHead(200, {
             "Content-Type": mime || "application/octet-stream",
             "Content-Disposition": "attachment; filename=" + encodeURI(filename)

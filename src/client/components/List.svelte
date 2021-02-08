@@ -5,7 +5,6 @@
         list = await result.json();
     }
 
-    export const update = ()=>getList();
     getList();
 
     function getSize(bytes){
@@ -18,16 +17,24 @@
 
 {#if list.length}
     <hr/>
-    <h3>Saved documents</h3>
+    <h3>Saved documents <span on:click={getList}>update</span></h3>
     <p></p>
     <table>
         <tr>
+            <th width="110">Screenshot</th>
             <th>Filename</th>
             <th>Size</th>
         </tr>
         {#each list as line}
         <tr>
-            <td>{line.name}</td>
+            <td>
+                {#if line.screenshot}
+                    <a href="/store/screenshot/{line.id}" target="_blank"><img class="thumb" src="/store/screenshot/{line.id}" alt="Screenshot" /></a>
+                {:else}
+                    <img class="thumb" src="/noscreenshot.png" alt="No Screenshot" />
+                {/if}
+            </td>
+            <td><a href="/store/download/{line.id}" target="_blank">{line.name}</a></td>
             <td>{getSize(line.size)}</td>
         </tr>
         {/each}
@@ -43,5 +50,18 @@
 
     td,th{
         border: 1px solid white;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .thumb{
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    h3 span{
+        font-weight: 300;
+        color:rgb(0,100,200);
+        cursor:pointer;
     }
 </style>

@@ -1,5 +1,8 @@
 import http from 'http';
+import fs from 'fs/promises';
+import path from 'path';
 import FormData from 'form-data';
+import {isDirectory} from './utils';
 
 export default function(apiURL){
     return {
@@ -17,7 +20,6 @@ function post(endpoint,data){
         }
 
         formData.submit(endpoint,async (err,res)=>{
-            console.log('ARGUMENTS',arguments);
             if(err) return reject(err);
             resolve(await bodyParser(res));
         })
@@ -37,26 +39,32 @@ function get(endpoint){
 }
 
 function bodyParser(responce){
-    const mime = res.headers['Content-Type'];
-    const isfile = res.headers['Content-Disposition'];
+    const mime = responce.headers['content-type'];
+    const isfile = responce.headers['content-disposition'];
     
     return new Promise((resolve,reject)=>{
-        let body = "";
-        responce.setEncoding('utf8');
+        let body = [];
         responce.on('error', err => reject(err.message));
-        responce.on('data', chunk=>body += chunk);
+        responce.on('data', chunk=>body.push(chunk));
         responce.on('end', async () => {
+            body = Buffer.concat(body);
             if(isfile){
-                const filename = isfile.split('filename=')[1];
-                const body = await responce.blob();
+                const name = isfile.split('filename=')[1];
                 return resolve({
                     body,
-                    filename,
-                    mime
+                    filename:name,
+                    mime,
+                    save: async (dir,filename)=>{
+                        const filepath = (await isDirectory(dir)) 
+                                            ? path.join(dir,filename || name) 
+                                            : dir;
+                        await fs.writeFile(filepath,body);
+                        return filepath;
+                    }
                 })
             }else if(mime == 'application/json'){
-                return resolve(JSON.parse(body));
-            }else return resolve(body);
+                return resolve(JSON.parse(body.toString()));
+            }else return resolve(body.toString());
         });
     });
 

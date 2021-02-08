@@ -10,6 +10,7 @@ esbuild.build({
     format: 'esm',
     minify: true,
     watch: DEV,
+    sourcemap: DEV && 'inline',
     incremental: DEV
 });
 
@@ -22,6 +23,7 @@ esbuild.build({
     minify: true,
     watch: DEV,
     incremental: DEV,
+    sourcemap: DEV && 'inline',
     external:['form-data', 'multiparty']
 });
 
