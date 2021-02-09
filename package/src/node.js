@@ -25,7 +25,7 @@ export function parseHook(request){
                 const read = async () => {
                     const buffer = await fs.readFile(file.path);
                     remove();
-                    return buffer();
+                    return buffer;
                 }
 
                 const save = async (dir,filename)=>{
@@ -57,6 +57,11 @@ export function doconv(apiURL){
 
     const api = createApi(apiURL ? apiURL.replace(/\/+$/,'') : '');
 
+    async function formats(){
+        const result = await api.get('/formats');
+        return result;
+    }
+
     async function convert(options){
 
         if(!options.file) throw new Error('File was not specified');
@@ -78,6 +83,7 @@ export function doconv(apiURL){
     }
 
     return {
-        convert
+        convert,
+        formats
     }
 }
