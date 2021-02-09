@@ -3,7 +3,7 @@ Document converting service with simple HTTP API packed in Docker image.  Powere
 
 ## Libraries
 
-Please check this packages to easy use the Doconv service.
+Check this packages for easy using the Doconv service.
 
 * [Doconv](https://npmjs.com/doconv) - Javascript API client for node.js and browsers.
 
@@ -30,19 +30,19 @@ You may create a form which will send a file to the service and download generat
 
 ## API
 
-> Post requests are sending using `multipart/form-data`. 
+> POST requests are sending using `multipart/form-data`. 
 
-> Each request mey return file attachment, JSON or plain text.
+> Each request will be responsed with file attachment, JSON or plain text.
 
 > If Hook-url is specified, it will recieve POST request with `multipart/form-data` body.
 
 
-### GET: /formats 
+### GET: `/formats`
 **Returns:** application/json
 
 Returns JSON list with all supported formats. Each element of list has this shape:
 
-```json
+```js
 {
     "doctype": "document",  //group of format
     "format": "docx", // Format identifier
@@ -54,7 +54,7 @@ Returns JSON list with all supported formats. Each element of list has this shap
 
 > Not all formats may be converted to each other.
 
-### POST: /convert/<format>
+### POST: `/convert/<format>`
 **Returns:** converted file or plain/text(if hook specified)
 
 **Params:**
