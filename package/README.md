@@ -131,6 +131,31 @@ Most of methods are asynchronus, use it as a Promise.
 * `download([name])` – call it to save file on device. Optionaly you may specify any `name` for downloading file.
 
 ---
+#### **`markup({options})`**
+
+**Options:**
+* `body` -  content for document generation.
+* `markup` - type of the content. Currently support `html` and `markdown`. *Default `html`*
+* `format` – format of target file. One from formats identifiers list which returns `format()` method. *(Default `pdf`)*;
+* `download` – once converted file will be recieved, opens save dialog in browser. Ignoring if `hook` property specified. *(Default `false`)*
+* `name` - basename of result file. *Default `Document`*
+* `pageWidth`  - page width in millimeters. *Default `210`*
+* `pageHeight`  - page height in millimeters. *Default `297`*
+* `marginTop` - top margin of the page in millimeters. *Default `15`*
+* `marginBottom` - bottom margin of the page in millimeters. *Default `15`*
+* `marginRight` - right margin of the page in millimeters. *Default `15`*
+* `marginLeft` - left margin of the page in millimeters. *Default `15`*
+* `pageBreak` -  string which will be replaced with page break in result document. *Default `<!--PAGEBREAK-->`*
+* `hook` – URL where is a server which can recieve a converted file(look for Node API below). *(Default `false`)*
+* `context` – any [serializable](https://developer.mozilla.org/en-US/docs/Glossary/Serialization) object, will be send to `hook` URL along with file. Place here any data you need in hook  to handle recieved file.*(Default `false`)*
+
+**Returns:** If `hook` property speciefed, will be return text confirmation, that file will be sended to hook's URL. Otherwise result will be an object:
+* `body` - converted file body content.
+* `filename` – name of file. 
+* `mime` – mime type of file
+* `download([name])` – call it to save file on device. Optionaly you may specify any `name` for downloading file.
+
+---
 ---
 
 ## API Node
@@ -183,6 +208,32 @@ Most of methods are asynchronus, use it as a Promise.
 **Options:**
 * `file` – [*files*](https://developer.mozilla.org/en-US/docs/Web/API/FileList) property value from the `<input type="file">` element. *(Required)*
 * `format` – format of target file. One from formats identifiers list which returns `format()` method. *(Default `pdf`)*;
+* `hook` – URL where is a server which can recieve a converted file(look for Node API below). *(Default `false`)*
+* `context` – any [serializable](https://developer.mozilla.org/en-US/docs/Glossary/Serialization) object, will be send to `hook` URL along with file. Place here any data you need in hook  to handle recieved file.*(Default `false`)*
+
+
+**Returns:** If `hook` property speciefed, will be return text confirmation, that file will be sended to hook's URL. Otherwise result will be an object:
+* `body` - converted file body content as a Buffer.
+* `filename` – name of file. 
+* `mime` – mime type of file
+* `save( <dir>,[filename] | <path> )` – save file in the specified `directory`. Optionaly you may specifiy a different `filename` also. Or you can just specifiy full path to the new file.
+
+---
+#### **`markup({options})`**
+
+**Options:**
+* `body` -  content for document generation.
+* `markup` - type of the content. Currently support `html` and `markdown`. *Default `html`*
+* `format` – format of target file. One from formats identifiers list which returns `format()` method. *(Default `pdf`)*;
+* `name` - basename of result file. *Default `Document`*
+* `pageWidth`  - page width in millimeters. *Default `210`*
+* `pageHeight`  - page height in millimeters. *Default `297`*
+* `marginTop` - top margin of the page in millimeters. *Default `15`*
+* `marginBottom` - bottom margin of the page in millimeters. *Default `15`*
+* `marginRight` - right margin of the page in millimeters. *Default `15`*
+* `marginLeft` - left margin of the page in millimeters. *Default `15`*
+* `pageBreak` -  string which will be replaced with page break in result document. *Default `<!--PAGEBREAK-->`*
+* `hook` – URL where is a server which can recieve a converted file(look for Node API below). *(Default `false`)*
 * `hook` – URL where is a server which can recieve a converted file(look for Node API below). *(Default `false`)*
 * `context` – any [serializable](https://developer.mozilla.org/en-US/docs/Glossary/Serialization) object, will be send to `hook` URL along with file. Place here any data you need in hook  to handle recieved file.*(Default `false`)*
 

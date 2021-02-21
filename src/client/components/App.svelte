@@ -1,6 +1,7 @@
 <script>
     import {Route,router,active} from 'tinro';
     import File from './File';
+    import Markup from './Markup';
     import List from './List';
     router.mode.memory();
 </script>
@@ -21,7 +22,7 @@
         <div class="content">
             <Route path="/" redirect="/file"/>
             <Route path="/file"><File/></Route>
-            <Route path="/markup">Markup</Route>
+            <Route path="/markup"><Markup/></Route>
             <Route path="/saved"><List/></Route>
         </div>
     </div>

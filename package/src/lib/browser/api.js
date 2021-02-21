@@ -3,17 +3,19 @@ import {downloadFile} from './utils';
 export default function(apiURL){
     return {
         get: async (endpoint)=>request(apiURL+endpoint,'GET'),
-        post: async (endpoint,data={})=>request(apiURL+endpoint,'POST',data)
+        post: {
+            json: async (endpoint,data={})=>request(apiURL+endpoint,'POST_JSON',data),
+            multipart: async (endpoint,data={})=>request(apiURL+endpoint,'POST_MULTIPART',data)
+        }
     }
 }
 
 async function request(endpoint,method,data){
 
     method = method || 'GET';
+    let options = {};
 
-    let options = {method};
-
-    if(method == 'POST'){
+    if(method == 'POST_MULTIPART'){
         const formData = new FormData();
         
         for(let field in data){
@@ -22,6 +24,12 @@ async function request(endpoint,method,data){
         options.body = formData;
     }
 
+    if(method == 'POST_JSON'){
+        options.body = JSON.stringify(data);
+        options.headers = {'Content-Type': 'application/json'}
+    }
+
+    options.method = method.replace(/_.+$/,'');
     let res = await fetch(endpoint,options);
 
     const mime = res.headers.get('Content-Type');

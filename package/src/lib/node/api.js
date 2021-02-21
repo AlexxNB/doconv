@@ -7,11 +7,38 @@ import {isDirectory} from './utils';
 export default function(apiURL){
     return {
         get: async (endpoint)=>get(apiURL+endpoint),
-        post: async (endpoint,data)=>post(apiURL+endpoint,data)
+        post: {
+            json: async (endpoint,data)=>post_json(apiURL+endpoint,data),
+            multipart: async (endpoint,data)=>post_multipart(apiURL+endpoint,data)
+        }
+         
     }
 }
 
-function post(endpoint,data){
+function post_json(endpoint,data){
+    return new Promise((resolve,reject)=>{
+
+        const options = {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'}
+        }
+
+        const req = http.request(endpoint,options, async (res)=>{
+            const message = await bodyParser(res);
+            if(!res.ok) return reject(message);
+            return resolve(message);
+        })
+
+        req.on("error", (err) => {
+            reject(err.message);
+        })
+
+        req.write(JSON.stringify(data));
+        req.end();
+    });
+}
+
+function post_multipart(endpoint,data){
     return new Promise((resolve,reject)=>{
         const formData = new FormData();
         

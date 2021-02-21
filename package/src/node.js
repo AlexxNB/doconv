@@ -77,13 +77,30 @@ export function doconv(apiURL){
         if(options.hook) data.hook = options.hook;
         if(options.context) data.context = JSON.stringify(options.context);
 
-        const result = await api.post('/convert/'+options.format,data);
+        const result = await api.post.multipart('/convert/'+options.format,data);
 
-        return options.hook ? `Result will be sent to ${hook}` : result;
+        return options.hook ? `Result will be sent to ${options.hook}` : result;
+    }
+
+    async function markup(options){
+
+        let data = {
+            body: '',
+            download: false,
+            markup: 'html',
+            format: 'pdf',
+            ...options
+        };
+
+        const format = data.format; delete data.format;
+        const result = await api.post.json('/markup/'+format,data);
+
+        return options.hook ? `Result will be sent to ${options.hook}` : result;
     }
 
     return {
         convert,
-        formats
+        formats,
+        markup
     }
 }

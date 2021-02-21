@@ -25,9 +25,29 @@ export default function(apiURL){
         if(options.hook) data.hook = options.hook;
         if(options.context) data.context = JSON.stringify(options.context);
 
-        const result = await api.post('/convert/'+options.format,data);
+        const result = await api.post.multipart('/convert/'+options.format,data);
 
         if(!options.hook &&  options.download && result.download) result.download();
+
+        return result;
+    }
+
+    async function markup(options){
+
+        let data = {
+            body: '',
+            download: false,
+            markup: 'html',
+            format: 'pdf',
+            ...options
+        };
+
+        let download = data.download; delete data.download;
+        let format = data.format; delete data.format;
+        
+        const result = await api.post.json('/markup/'+format,data);
+
+        if(!data.hook &&  download && result.download) result.download();
 
         return result;
     }
@@ -35,7 +55,8 @@ export default function(apiURL){
 
     return {
         formats,
-        convert
+        convert,
+        markup
     }
 }
 
