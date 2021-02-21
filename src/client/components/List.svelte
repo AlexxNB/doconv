@@ -15,10 +15,8 @@
     }
 </script>
 
-{#if list.length}
-    <hr/>
-    <h3>Saved documents <span on:click={getList}>update</span></h3>
-    <p></p>
+{#if list} 
+    {#if list.length}
     <table>
         <tr>
             <th width="110">Screenshot</th>
@@ -39,6 +37,13 @@
         </tr>
         {/each}
     </table>
+    {:else}
+        <p class="text-center">No saved files</p>
+    {/if}
+    <hr/>
+    <p class="text-center">
+        <button on:click={getList}>Update</button>
+    </p>
 {/if}
 
 
@@ -57,11 +62,5 @@
     .thumb{
         max-width: 100px;
         max-height: 100px;
-    }
-
-    h3 span{
-        font-weight: 300;
-        color:rgb(0,100,200);
-        cursor:pointer;
     }
 </style>

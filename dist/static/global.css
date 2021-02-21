@@ -62,3 +62,19 @@ button:not(:disabled):active {
 button:focus {
 	border-color: #666;
 }
+
+hr{
+	border:1px solid #555454;
+	margin: 15px -20px;
+}
+
+.error{
+	background-color:#313131;
+	padding:10px;
+	border-radius: 10px;
+	color: #d32828;
+}
+
+.text-center{
+	text-align: center;
+}

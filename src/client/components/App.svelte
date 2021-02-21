@@ -1,70 +1,33 @@
 <script>
-    import doconv from 'doconv/browser';
+    import {Route,router,active} from 'tinro';
+    import File from './File';
     import List from './List';
-    const dc = doconv();
-
-    let files;
-    let error = null;
-    let format='pdf';
-
-    let debug = false;
-
-
-    function doConvert(){
-        error = null;
-        dc.convert({
-            file: files[0],
-            format
-        }).then( result => {
-            result.download();
-        }).catch(err => error=err);
-    }
-
-    function doSave(){
-        error = null;
-        dc.convert({
-            file: files[0],
-            format,
-            hook:'http://localhost:3000/store/save',
-            context:{foo:'bar'}
-        }).then( result => {
-            // todo something
-        }).catch(err => error=err);
-    }
-
-    window.addEventListener('keydown',(e)=>{
-        if(e.keyCode == 68) debug = !debug;
-    })
+    router.mode.memory();
 </script>
 <div class="wrapper">
     <div class="card">
-        <h1>Doconv</h1>
-        <p>Docker Document Converter</p>
-
-        
-        {#await dc.formats()}
-            Loading...
-        {:then list}
-        <h4>1. Choose document</h4>
-            <input type="file" bind:files/>
-        <h4>2. Choose new format</h4>
-            <select bind:value={format}>
-                {#each list as item}
-                <option value={item.format}>*.{item.ext} - {item.description}</option>
-                {/each}
-            </select>
-        <h4>3. Download or save converted file</h4>
-            {#if error}
-                <div class="error">{error}</div>
-            {/if}
-            <p>
-                <input type='submit' value='Convert & download!' disabled={files===undefined} on:click={doConvert}/>
-                {#if debug}<input type='submit' value='Convert & save!' disabled={files===undefined} on:click={doSave}/>{/if}
-            </p>
-        {/await}
-        {#if debug}<List/>{/if}
+        <div class="top">
+            <div class="logo">
+                <h1>Doconv</h1>
+                <p>Docker Document Converter</p>
+            </div>
+            <div class="menu">
+                <a href="/file" use:active>Convert file</a>
+                <a href="/markup" use:active>Convert markup</a>
+                <a href="/saved" use:active>Saved files</a>
+            </div>
+        </div>
+        <hr/>
+        <div class="content">
+            <Route path="/" redirect="/file"/>
+            <Route path="/file"><File/></Route>
+            <Route path="/markup">Markup</Route>
+            <Route path="/saved"><List/></Route>
+        </div>
     </div>
 </div>
+
+
 
 
 <style>
@@ -77,20 +40,46 @@
     }
     .card{
         background-color: #484848;
-        padding: 10px 80px;
+        padding: 20px 30px;
         border-radius: 15px;
         margin: 50px;
+        min-width: 650px;
+    }
+    .top{
+        display:flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
     }
 
-    .error{
-        background-color:#313131;
-        padding:10px;
-        border-radius: 10px;
-        color: #d32828;
+    .logo h1{
+        margin: 0px;
+        padding: 0px;
     }
 
-    h1,p{
-        text-align: center;
+    .logo p{
+        margin: 0px;
+        padding: 0px;
+        font-size: .8em;
+        color: #818181;
+    }
+
+    .menu a{
+        display: block;
+        color:#dd9300;
+    }
+
+    .menu a:hover{
+        text-decoration: none;
+        color:#b97c02;
+    }
+
+    .menu :global(a.active){
+        color: #ffd47e;
+    }
+
+    .content{
+        padding: 0px 20px;
     }
 </style>
 
