@@ -1,6 +1,6 @@
 {
   "name": "doconv",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Doconv API client (documents converter service in docker)",
   "main": "dist/doconv.js",
   "module": "dist/doconv.mjs",
