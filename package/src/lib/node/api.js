@@ -25,7 +25,7 @@ function post_json(endpoint,data){
 
         const req = http.request(endpoint,options, async (res)=>{
             const message = await bodyParser(res);
-            if(!res.ok) return reject(message);
+            if(!res.statusCode != 200) return reject(message);
             return resolve(message);
         })
 
@@ -57,7 +57,7 @@ function get(endpoint){
     return new Promise((resolve,reject)=>{
         http.get(endpoint,async (res)=>{
             const message = await bodyParser(res);
-            if(!res.ok) return reject(message);
+            if(res.statusCode != 200) return reject(message);
             return resolve(message);
         }).on("error", (err) => {
             reject(err.message);
