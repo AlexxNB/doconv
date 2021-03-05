@@ -20,7 +20,7 @@
   ],
   "author": "Alexey Schebelev",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "form-data": "^3.0.0",
     "multiparty": "^4.2.2"
   }
