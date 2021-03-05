@@ -19,6 +19,14 @@
     "unoconv"
   ],
   "author": "Alexey Schebelev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexxNB/doconv.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlexxNB/doconv/issues"
+  },
+  "homepage": "https://github.com/AlexxNB/doconv#readme",
   "license": "MIT",
   "dependencies": {
     "form-data": "^3.0.0",
